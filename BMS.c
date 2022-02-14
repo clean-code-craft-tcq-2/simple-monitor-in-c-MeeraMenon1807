@@ -31,7 +31,7 @@ char BattConditionCheck(int BatteryCondition, char* parameter){
 	strcpy(warning1, warning);
 	if (BatteryCondition == 0)
 	{
-		Output = strcat(parameter, warning);
+		Output = strcat(parameter, warning1);
 		printf("%s \n", Output);
 	}
 }
