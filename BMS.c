@@ -35,7 +35,7 @@ int batteryIsOk(float temperature, float soc, float chargeRate) {
     printWarning("Charge Rate out of range!", isChargeRateOutOfRange);
     
     int result = isTemperatureOutOfRange || isSocOutOfRange || isChargeRateOutOfRange;
-    return (result>0) ? 0 : 1;
+    return result;
     
 }
 
