@@ -17,7 +17,7 @@ int checkChargeRateOutOfRange(float chargeRate) {
     return chargeRate > 0.8F;
 }
 
-void printWarning(char* message, bool hasWarning) {
+void printWarning(char* message, int hasWarning) {
     if(hasWarning) {
         printf("%s\n", message);
     }
