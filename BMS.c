@@ -37,14 +37,6 @@ int batteryIsOk(float temperature, float soc, float chargeRate) {
 }
 
 int main() {
-  assert(!checkOutOfRange(10, 20, 15.5F));
-  assert(checkOutOfRange(10, 20, 25.5F));
-  assert(!checkTemperatureOutOfRange(25));
-  assert(checkTemperatureOutOfRange(46));
-  assert(!checkSocOutOfRange(70));
-  assert(checkSocOutOfRange(19));
-  assert(!checkChargeRateOutOfRange(0.7F));
-  assert(checkChargeRateOutOfRange(1));
   assert(batteryIsOk(25, 70, 0.7));
   assert(!batteryIsOk(50, 85, 0));
 }
