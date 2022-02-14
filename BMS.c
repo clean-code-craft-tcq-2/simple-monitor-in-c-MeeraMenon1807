@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdbool.h>
 #include <assert.h>
 
 int checkOutOfRange(int lowerLimit, int upperLimit, float val) {
