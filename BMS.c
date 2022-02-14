@@ -1,54 +1,39 @@
-#include "BMS.h"
+#include <stdio.h>
+#include <stdbool.h>
+#include <assert.h>
 
-int BattTempCheck(float temp){
-    if (temp < 0 || temp > 45)
-	{
-	return 0;
-	}
-	return 1;
+bool checkOutOfRange(int lowerLimit, int upperLimit, float val) {
+    return (val < lowerLimit || val > upperLimit);
 }
 
-int BattSocCheck(float Soc){
-if (Soc < 20 || Soc > 80)
-	{
-	return 0;
-	}
-	return 1;
+bool checkTemperatureOutOfRange(float temperature) {
+    return checkOutOfRange(0, 45, temperature);
 }
 
-int BattChargeRateCheck(float ChargeRate){
-if (ChargeRate > 0.8)
-	{
-	return 0;
-	}
-	return 1;
+bool checkSocOutOfRange(float soc) {
+    return checkOutOfRange(20, 80, soc);
 }
 
-char BattConditionCheck(int BatteryCondition, char* parameter){
-	char warning[100] = " out of range!";
-	char Output[100];
-	if (BatteryCondition == 0)
-	{
-		Output = strcat(parameter, warning);
-		printf("%s \n", Output);
-	}
+bool checkChargeRateOutOfRange(float chargeRate) {
+    return chargeRate > 0.8;
 }
 
-int batteryIsOk(float temp, float Soc, float ChargeRate) {
-	int BatteryCondition1 = BattTempCheck(temp);
-	BattConditionCheck(BatteryCondition1, "Temperature");
-	int BatteryCondition2 = BattSocCheck(Soc);
-	BattConditionCheck(BatteryCondition2, "State of charge");
-	int BatteryCondition3 = BattChargeRateCheck(ChargeRate);
-	BattConditionCheck(BatteryCondition3, "Battery Charge rate");
-	int BatteryCondition = BatteryCondition1 && BatteryCondition2 && BatteryCondition3;
-	return BatteryCondition;
+void printWarning(char* message, bool hasWarning) {
+    if(hasWarning) {
+        printf("%s\n", message);
+    }
 }
-	
+
+int batteryIsOk(float temperature, float soc, float chargeRate) {
+    printWarning("Temperature out of range!", checkTemperatureOutOfRange(temperature));
+    printWarning("State of Charge out of range!", checkSocOutOfRange(soc));
+    printWarning("Charge Rate out of range!", checkChargeRateOutOfRange(chargeRate));
+}
+
 int main() {
-  assert(batteryIsOk(25, 70, 0.7) == 1);
-  assert(batteryIsOk(50, 85, 0) == 0);
-}	
+  assert(batteryIsOk(25, 70, 0.7));
+  assert(batteryIsOk(50, 85, 0));
+}
 	
 	
 	
