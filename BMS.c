@@ -25,13 +25,11 @@ if (ChargeRate > 0.8)
 }
 
 char BattConditionCheck(int BatteryCondition, char* parameter){
-	char warning[100] = " out of range!\n";
+	char warning[100] = " out of range!";
 	char Output[100];
-	char warning1[100]; 
-	strcpy(warning1, warning);
 	if (BatteryCondition == 0)
 	{
-		Output = strcat(parameter, warning1);
+		Output = strcat(parameter, warning);
 		printf("%s \n", Output);
 	}
 }
