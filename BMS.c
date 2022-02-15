@@ -1,23 +1,8 @@
 #include <stdio.h>
 #include <assert.h>
 #include "checksum.h"
-
-#define TOLERANCE_PERCENTAGE 0.05F
-
-#define MIN_TEMPERATURE 0
-#define MAX_TEMPERATURE 45
-#define TEMPERATURE_TOLERANCE_VALUE (MAX_TEMPERATURE * TOLERANCE_PERCENTAGE)
-#define MIN_TEMPERATURE_WARNING_LEVEL (MIN_TEMPERATURE + TEMPERATURE_TOLERANCE_VALUE)
-#define MAX_TEMPERATURE_WARNING_LEVEL (MAX_TEMPERATURE - TEMPERATURE_TOLERANCE_VALUE)
-
-#define MIN_SOC 20
-#define MAX_SOC 80
-#define SOC_TOLERANCE_VALUE (MAX_SOC * TOLERANCE_PERCENTAGE)
-#define MIN_SOC_WARNING_LEVEL (MIN_SOC + SOC_TOLERANCE_VALUE)
-#define MAX_SOC_WARNING_LEVEL (MAX_SOC - SOC_TOLERANCE_VALUE)
-
-#define MAX_CHARGERATE 0.8F
-#define MAX_CHARGERATE_WARNING_LEVEL (MAX_CHARGERATE - (MAX_CHARGERATE * TOLERANCE_PERCENTAGE))
+#include "constants.h"
+#include "lang.h"
 
 int checkOutOfRange(int lowerLimit, int upperLimit, float val) {
     return (val < lowerLimit || val > upperLimit);
@@ -63,16 +48,16 @@ int batteryIsOk(float temperature, float soc, float chargeRate) {
     checkChargeRateOutOfRange(chargeRate);
 
     int isTemperatureOutOfRange = hasTempError();
-    printWarning("Temperature out of range!", isTemperatureOutOfRange);
-    printWarning("Temperature nearing out of range!", hasTempWarning());
+    printWarning(TEMP_OUT_OF_RANGE_MSG, isTemperatureOutOfRange);
+    printWarning(TEMP_NEARLY_OUT_OF_RANGE_MSG, hasTempWarning());
 
     int isSocOutOfRange = hasSocError();
-    printWarning("State of Charge out of range!", isSocOutOfRange);
-    printWarning("State of Charge nearing out of range!", hasSocWarning());
+    printWarning(SOC_OUT_OF_RANGE_MSG, isSocOutOfRange);
+    printWarning(SOC_NEARLY_OUT_OF_RANGE_MSG, hasSocWarning());
 
     int isChargeRateOutOfRange = hasChargeRateError();
-    printWarning("Charge Rate out of range!", isChargeRateOutOfRange);
-    printWarning("Charge Rate nearing out of range!", hasChargeRateWarning());
+    printWarning(CHARGERATE_OUT_OF_RANGE_MSG, isChargeRateOutOfRange);
+    printWarning(CHARGERATE_NEARLY_OUT_OF_RANGE_MSG, hasChargeRateWarning());
     
     return (isTemperatureOutOfRange + isSocOutOfRange + isChargeRateOutOfRange) == 0;
     
