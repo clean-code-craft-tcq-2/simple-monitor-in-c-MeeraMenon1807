@@ -1,22 +1,35 @@
 #include <stdio.h>
 #include <assert.h>
 
+#define TOLERANCE_PERCENTAGE 0.05F
+
 #define MIN_TEMPERATURE 0
-#define MAX_TEMPERATURE 45 
-#define MIN_SoC 20
-#define MAX_SoC 80 
+#define MAX_TEMPERATURE 45
+#define TEMPERATURE_TOLERANCE_VALUE (MAX_TEMPERATURE * TOLERANCE_PERCENTAGE)
+#define MIN_TEMPERATURE_WARNING_LEVEL (MIN_TEMPERATURE + TEMPERATURE_TOLERANCE_VALUE)
+#define MAX_TEMPERATURE_WARNING_LEVEL (MAX_TEMPERATURE - TEMPERATURE_TOLERANCE_VALUE)
+
+#define MIN_SOC 20
+#define MAX_SOC 80
+#define SOC_TOLERANCE_VALUE (MAX_SOC * TOLERANCE_PERCENTAGE)
+#define MIN_SOC_WARNING_LEVEL (MIN_SOC + SOC_TOLERANCE_VALUE)
+#define MAX_SOC_WARNING_LEVEL (MAX_SOC - SOC_TOLERANCE_VALUE)
+
 #define MAX_CHARGERATE 0.8F
+#define MAX_CHARGERATE_WARNING_LEVEL (MAX_CHARGERATE - (MAX_CHARGERATE * TOLERANCE_PERCENTAGE))
+
 
 int checkOutOfRange(int lowerLimit, int upperLimit, float val) {
     return (val < lowerLimit || val > upperLimit);
 }
 
 int checkTemperatureOutOfRange(float temperature) {
-    return checkOutOfRange(MIN_TEMPERATURE, MAX_TEMPERATURE, temperature);
+    int checksum = checkOutOfRange(MIN_TEMPERATURE, MAX_TEMPERATURE, temperature);
+	return checksum ? checksum : checkOutOfRange(MIN_TEMPERATURE_WARNING_LEVEL, MAX_TEMPERATURE_WARNING_LEVEL, temperature);
 }
 
 int checkSocOutOfRange(float soc) {
-    return checkOutOfRange(MIN_SoC, MAX_SoC, soc);
+    return checkOutOfRange(MIN_SOC, MAX_SOC, soc);
 }
 
 int checkChargeRateOutOfRange(float chargeRate) {
@@ -39,8 +52,7 @@ int batteryIsOk(float temperature, float soc, float chargeRate) {
     int isChargeRateOutOfRange = checkChargeRateOutOfRange(chargeRate);
     printWarning("Charge Rate out of range!", isChargeRateOutOfRange);
     
-    return (isTemperatureOutOfRange + isSocOutOfRange + isChargeRateOutOfRange) == 0;
-    
+    return (isTemperatureOutOfRange + isSocOutOfRange + isChargeRateOutOfRange) == 0;  
 }
 
 int main() {
