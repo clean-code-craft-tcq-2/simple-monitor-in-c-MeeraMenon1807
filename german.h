@@ -1,0 +1,6 @@
+#define TEMP_OUT_OF_RANGE_MSG "Temperatur außerhalb des Bereichs!"
+#define TEMP_NEARLY_OUT_OF_RANGE_MSG "Temperatur nähert sich außerhalb des zulässigen Bereichs!"
+#define SOC_OUT_OF_RANGE_MSG "Ladezustand außerhalb des Bereichs!"
+#define SOC_NEARLY_OUT_OF_RANGE_MSG "Ladezustand nähert sich außerhalb der Reichweite!"
+#define CHARGERATE_OUT_OF_RANGE_MSG "Laderate außerhalb des Bereichs!"
+#define CHARGERATE_NEARLY_OUT_OF_RANGE_MSG "Laderate nähert sich außerhalb des Bereichs!"

@@ -1,26 +1,38 @@
 #include <stdio.h>
 #include <assert.h>
-
-#define MIN_TEMPERATURE 0
-#define MAX_TEMPERATURE 45 
-#define MIN_SoC 20
-#define MAX_SoC 80 
-#define MAX_CHARGERATE 0.8F
+#include "checksum.h"
+#include "constants.h"
+#include "lang.h"
 
 int checkOutOfRange(int lowerLimit, int upperLimit, float val) {
     return (val < lowerLimit || val > upperLimit);
 }
 
 int checkTemperatureOutOfRange(float temperature) {
-    return checkOutOfRange(MIN_TEMPERATURE, MAX_TEMPERATURE, temperature);
+    int isTemperatureOutOfRange = checkOutOfRange(MIN_TEMPERATURE, MAX_TEMPERATURE, temperature);
+    setTempError(isTemperatureOutOfRange);
+    if(!isTemperatureOutOfRange) {
+        setTempWarning(checkOutOfRange(MIN_TEMPERATURE_WARNING_LEVEL, MAX_TEMPERATURE_WARNING_LEVEL, temperature));
+    }
+    return isTemperatureOutOfRange;
 }
 
 int checkSocOutOfRange(float soc) {
-    return checkOutOfRange(MIN_SoC, MAX_SoC, soc);
+    int isSocOutOfRange = checkOutOfRange(MIN_SOC, MAX_SOC, soc);
+    setSocError(isSocOutOfRange);
+    if(!isSocOutOfRange) {
+        setSocWarning(checkOutOfRange(MIN_SOC_WARNING_LEVEL, MAX_SOC_WARNING_LEVEL, soc));
+    }
+    return isSocOutOfRange;
 }
 
 int checkChargeRateOutOfRange(float chargeRate) {
-    return chargeRate > MAX_CHARGERATE;
+    int isChargeRateOutOfRange = chargeRate > MAX_CHARGERATE;
+    setChargeRateError(isChargeRateOutOfRange);
+    if(!isChargeRateOutOfRange) {
+        setChargeRateWarning(chargeRate > MAX_CHARGERATE_WARNING_LEVEL);
+    }
+    return isChargeRateOutOfRange;
 }
 
 void printWarning(char* message, int hasWarning) {
@@ -30,14 +42,22 @@ void printWarning(char* message, int hasWarning) {
 }
 
 int batteryIsOk(float temperature, float soc, float chargeRate) {
-    int isTemperatureOutOfRange = checkTemperatureOutOfRange(temperature);
-    printWarning("Temperature out of range!", isTemperatureOutOfRange);
-    
-    int isSocOutOfRange = checkSocOutOfRange(soc);
-    printWarning("State of Charge out of range!", isSocOutOfRange);
-    
-    int isChargeRateOutOfRange = checkChargeRateOutOfRange(chargeRate);
-    printWarning("Charge Rate out of range!", isChargeRateOutOfRange);
+
+    checkTemperatureOutOfRange(temperature);
+    checkSocOutOfRange(soc);
+    checkChargeRateOutOfRange(chargeRate);
+
+    int isTemperatureOutOfRange = hasTempError();
+    printWarning(TEMP_OUT_OF_RANGE_MSG, isTemperatureOutOfRange);
+    printWarning(TEMP_NEARLY_OUT_OF_RANGE_MSG, hasTempWarning());
+
+    int isSocOutOfRange = hasSocError();
+    printWarning(SOC_OUT_OF_RANGE_MSG, isSocOutOfRange);
+    printWarning(SOC_NEARLY_OUT_OF_RANGE_MSG, hasSocWarning());
+
+    int isChargeRateOutOfRange = hasChargeRateError();
+    printWarning(CHARGERATE_OUT_OF_RANGE_MSG, isChargeRateOutOfRange);
+    printWarning(CHARGERATE_NEARLY_OUT_OF_RANGE_MSG, hasChargeRateWarning());
     
     return (isTemperatureOutOfRange + isSocOutOfRange + isChargeRateOutOfRange) == 0;
     
@@ -68,4 +88,5 @@ int main() {
   
   assert(batteryIsOk(25, 70, 0.7));
   assert(!batteryIsOk(50, 85, 0));
+  assert(batteryIsOk(44, 79, 0.77));
 }
