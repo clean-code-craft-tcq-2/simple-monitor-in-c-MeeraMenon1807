@@ -1,0 +1,6 @@
+#define TEMP_OUT_OF_RANGE_MSG "Temperature out of range!"
+#define TEMP_NEARLY_OUT_OF_RANGE_MSG "Temperature nearing out of range!"
+#define SOC_OUT_OF_RANGE_MSG "State of Charge out of range!"
+#define SOC_NEARLY_OUT_OF_RANGE_MSG "State of Charge nearing out of range!"
+#define CHARGERATE_OUT_OF_RANGE_MSG "Charge Rate out of range!"
+#define CHARGERATE_NEARLY_OUT_OF_RANGE_MSG "Charge Rate nearing out of range!"
