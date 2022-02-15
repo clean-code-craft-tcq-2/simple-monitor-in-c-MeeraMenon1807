@@ -2,7 +2,7 @@
 #include <assert.h>
 
 #define MIN_TEMPERATURE 0
-#define MAX_TEMPERATURE 40 
+#define MAX_TEMPERATURE 45 
 #define MIN_SoC 20
 #define MAX_SoC 80 
 #define MAX_CHARGERATE 0.8F
