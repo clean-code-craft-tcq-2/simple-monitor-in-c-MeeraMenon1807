@@ -1,20 +1,26 @@
 #include <stdio.h>
 #include <assert.h>
 
+#define MIN_TEMPERATURE 0
+#define MAX_TEMPERATURE 40 
+#define MIN_SoC 20
+#define MAX_SoC 80 
+#define MAX_CHARGERATE 0.8F
+
 int checkOutOfRange(int lowerLimit, int upperLimit, float val) {
     return (val < lowerLimit || val > upperLimit);
 }
 
 int checkTemperatureOutOfRange(float temperature) {
-    return checkOutOfRange(0, 45, temperature);
+    return checkOutOfRange(MIN_TEMPERATURE, MAX_TEMPERATURE, temperature);
 }
 
 int checkSocOutOfRange(float soc) {
-    return checkOutOfRange(20, 80, soc);
+    return checkOutOfRange(MIN_SoC, MAX_SoC, soc);
 }
 
 int checkChargeRateOutOfRange(float chargeRate) {
-    return chargeRate > 0.8F;
+    return chargeRate > MAX_CHARGERATE;
 }
 
 void printWarning(char* message, int hasWarning) {
